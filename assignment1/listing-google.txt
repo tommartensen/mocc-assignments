@@ -1,0 +1,15 @@
+# Initialize Gcloud 
+gcloud init 
+
+# Login in web browser, create new cloud project when asked
+# Enable Compute Engine API (and billing) for project
+https://console.developers.google.com/apis/library/compute.googleapis.com?project=<project name>
+
+# Create an instance ("my-instance-1") with the image "coreos-stable" in zone "europe-west1-b", machine type by default "n1-standard-1" (smallest available type that does not support bursting)
+gcloud compute instances create my-instance-1 --image-family coreos-stable --image-project coreos-cloud --zone europe-west1-b
+
+# Create an SSH connection (sets up SSH keys on first connection)
+gcloud compute ssh my-instance-1 --zone europe-west1-b
+
+# Stop the instance
+gcloud compute instances stop my-instance-1

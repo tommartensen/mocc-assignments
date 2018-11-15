@@ -11,7 +11,7 @@ chmod 400 devenv-key.pem
 # Create security group (holds inbound and outbound traffic rules), automatically returns security group id
 aws ec2 create-security-group --group-name devenv-sg --description "security group for development environment"
 
-# Allowing inbount traffic for our security group with TCP on port 22 from anywhere (SSH access)
+# Allowing inbound traffic for our security group with TCP on port 22 from anywhere (SSH access)
 aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
 
 # Run one instance with Amazon Linux (HVM (SSD) EBS-Backed 64-bit) operating system, our security group attached, of smallest available type, authorize with devenv-key and return the instance id
@@ -23,3 +23,6 @@ aws ec2 describe-instances --instance-ids i-0215403ad6755ad0c --query 'Reservati
 # Connect via SSH (type 'yes' when asked if you want to trust the remote server)
 ssh -i <path to secret file created above> ec2-user@<Public DNS Name>
 # e.g. ssh -i devenv-key.pem ec2-user@ec2-3-120-128-218.eu-central-1.compute.amazonaws.com
+
+# Stop instances
+aws ec2 stop-instances --instance-ids i-0215403ad6755ad0c
