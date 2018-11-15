@@ -5,11 +5,17 @@ gcloud init
 # Enable Compute Engine API (and billing) for project
 https://console.developers.google.com/apis/library/compute.googleapis.com?project=<project name>
 
-# Create an instance ("my-instance-1") with the image "coreos-stable" in zone "europe-west1-b", machine type by default "n1-standard-1" (smallest available type that does not support bursting)
-gcloud compute instances create my-instance-1 --image-family coreos-stable --image-project coreos-cloud --zone europe-west1-b
+# Create an instance ("my-instance-1") with the image "ubuntu-minimal-1810" in zone "europe-west1-b", machine type by default "n1-standard-1" (smallest available type in terms of vCPU that does not support bursting of CPU power (unspecified how much more processing power is available))
+gcloud compute instances create my-instance-1 --image-family ubuntu-minimal-1810 --image-project ubuntu-os-cloud --zone europe-west1-b
 
 # Create an SSH connection (sets up SSH keys on first connection)
 gcloud compute ssh my-instance-1 --zone europe-west1-b
 
 # Stop the instance
-gcloud compute instances stop my-instance-1
+gcloud compute instances stop my-instance-1 --zone europe-west1-b
+
+# Start the instance
+gcloud compute instances start my-instance-1 --zone europe-west1-b
+
+# Install requirements and clone repository (requires interaction)
+sudo apt-get update && sudo apt-get install -y git gcc && git clone https://github.com/tommartensen/mocc-assignments
