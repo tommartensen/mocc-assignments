@@ -1,0 +1,24 @@
+#!/bin/bash
+
+print_rate() {
+    # Sample output: 2097152 bytes (2.1 MB, 2.0 MiB) copied, 0.014447 s, 145 MB/s
+    BYTES_COPIED=$1
+    TIME_ELAPSED=$(echo $8 | sed 's/,/\./')
+    # Calculate rate in Bytes/second
+    echo $(echo "scale=3; $BYTES_COPIED/$TIME_ELAPSED" | bc -l)    
+}
+
+
+# Write speed, copy from /dev/zero to special file the specified amount of data (should fit into RAM completely), get last line of output (had to redirect stderr to stdout for this)
+FILE_SIZE="256M"
+OUTPUT=$(dd if=/dev/zero of=/tmp/test1.img bs=$FILE_SIZE count=1 oflag=dsync 2>&1 | tail -n 1)
+
+print_rate $OUTPUT
+
+# Test read speed
+# Flush and drop caches before starting
+sudo sh -c "sync && echo 3 > /proc/sys/vm/drop_caches"
+# Read file written beforehand to /dev/null with block size 8k
+OUTPUT=$(dd if=/tmp/test1.img of=/dev/null bs=8k 2>&1 | tail -n 1)
+
+print_rate $OUTPUT
