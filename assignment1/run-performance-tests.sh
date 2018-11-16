@@ -1,5 +1,4 @@
 #!/bin/bash
 
-TIMESTAMP=$(date +%s)
-RESULT=$(sh measure-cpu.sh)
-echo "$TIMESTAMP,$RESULT" >> output-cpu.csv
+echo "$(date +%s),$(sh measure-cpu.sh)" >> output-cpu.csv
+echo "$(date +%s),$(sh measure-mem.sh | tail -1)" >> output-memory.csv
