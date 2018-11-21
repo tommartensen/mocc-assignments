@@ -26,3 +26,12 @@ ssh -i <path to secret file created above> ec2-user@<Public DNS Name>
 
 # Stop instances
 aws ec2 stop-instances --instance-ids i-0215403ad6755ad0c
+
+# Start instances
+aws ec2 stop-instances --instance-ids i-0215403ad6755ad0c
+
+# Install requirements
+yum update && yum install -y git gcc bc fio nano && git clone https://github.com/tommartensen/mocc-assignments
+
+# Add the following cronjob (replace path if necessary)
+0 * * * * ~/mocc-assignments/assignment1/run-performance-tests.sh

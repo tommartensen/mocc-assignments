@@ -18,4 +18,7 @@ gcloud compute instances stop my-instance-1 --zone europe-west1-b
 gcloud compute instances start my-instance-1 --zone europe-west1-b
 
 # Install requirements and clone repository (requires interaction)
-sudo apt-get update && sudo apt-get install -y git gcc bc && git clone https://github.com/tommartensen/mocc-assignments
+sudo apt-get update && sudo apt-get install -y git gcc bc fio nano && git clone https://github.com/tommartensen/mocc-assignments
+
+# Add the following cronjob (replace the path if necessary)
+0 * * * * ~/mocc-assignments/assignment1/run-performance-tests.sh
