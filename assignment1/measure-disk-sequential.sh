@@ -15,8 +15,6 @@ OUTPUT=$(dd if=/dev/zero of=/tmp/test1.img bs=$FILE_SIZE count=1 oflag=dsync 2>&
 WRITE_RATE=$(print_rate $OUTPUT)
 
 # Test read speed
-# Flush and drop caches before starting
-sh -c "sync && echo 3 > /proc/sys/vm/drop_caches"
 # Read file written beforehand to /dev/null with block size 8k
 OUTPUT=$(dd if=/tmp/test1.img of=/dev/null bs=8k 2>&1 | tail -n 1)
 READ_RATE=$(print_rate $OUTPUT)
