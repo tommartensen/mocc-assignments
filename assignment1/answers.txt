@@ -1,0 +1,27 @@
+# CPU benchmark
+1.  The benchmark sequentially does linear algebra calculations, LU decomposition (some complicated matrix splitting with pivoting) and linear equation solving, all with floating point numbers to measure processor performance. 
+    It is designed to run enough repetitions to take at least 10 seconds. 
+    The result is based on the speed of LU decomposition and linear equation solving.
+2.  The measure should be an indicator of how good a processor can solve real-world tasks. These tasks are approximated as floating point operations. 
+    The result is measured in Floating Point Operations Per Seconds (FLOPS). 
+    As floating-point operations are unprivileged instructions, we do not expect paravirtualization to have a big effect, the results should be comparable with a CPU of similar clock speed.
+    To see decreased performance through paravirtualization, we would have to create a benchmark with more syscalls. 
+3.  AWS average result:     2302105.442 KiloFLOPS                GCE average result:     2498647.101 KiloFLOPS
+
+    We see that GCE (n1-standard-1) has a higher average performance (2.5 GigaFLOPS) than the AWS instance (t2.nano) with 2.3 GigaFLOPS.
+    Both smallest instances perform in the same order of magnitude, which is consistent with our expectations.
+    Since we know that n1 instances run on 2.6 GHz Intel Xeon E5 (Sandy Bridge), 2.5 GHz Intel Xeon E5 v2 (Ivy Bridge), 2.3 GHz Intel Xeon E5 v3 (Haswell), 2.2 GHz Intel Xeon E5 v4 (Broadwell) or 2,0 GHz Intel Skylake (Skylake) 
+    and we know from AWS that t2 instances have **up to** 3.3 GHz clock speed on the latest Intel Xeon processor
+    we can't really say if GCE or AWS is preferable for the smallest instance type in regards to CPU speed,
+    because there are too many unknown variables: 
+    We could have landed on a fast GCE processor with outperforms the t2.nano, while a slower GCE processor would have been slower than t2.nano 
+
+# Memory benchmark
+
+# Disk benchmark
+We expect the random access to be slower than the sequential access, since we have to jump around in the data instead of reading sequentially from start to end.
+Since GCE uses non-volatile disk space and we did not do any improvements there (regional storage or additional local SSD), 
+we expect it to have lower performance than the EBS-backed SSD storage from AWS.
+
+For the random access, the GCE instance is three times slower than AWS instance with 515 / 1600 operations. This backs our expectations.
+ 

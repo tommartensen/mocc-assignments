@@ -10,13 +10,13 @@ print_rate() {
 
 
 # Write speed, copy from /dev/zero to special file the specified amount of data (should fit into RAM completely), get last line of output (had to redirect stderr to stdout for this)
-FILE_SIZE="256M"
+FILE_SIZE="128M"
 OUTPUT=$(dd if=/dev/zero of=/tmp/test1.img bs=$FILE_SIZE count=1 oflag=dsync 2>&1 | tail -n 1)
 WRITE_RATE=$(print_rate $OUTPUT)
 
 # Test read speed
-# Read file written beforehand to /dev/null with block size 8k
-OUTPUT=$(dd if=/tmp/test1.img of=/dev/null bs=8k 2>&1 | tail -n 1)
+# Read file written beforehand to /tmp/test2.img with block size 8k
+OUTPUT=$(dd if=/tmp/test1.img of=/dev/null iflag=direct bs=$FILE_SIZE 2>&1 | tail -n 1)
 READ_RATE=$(print_rate $OUTPUT)
 
 echo "scale=3; ($WRITE_RATE+$READ_RATE)/2" | bc -l
