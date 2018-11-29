@@ -15,20 +15,19 @@ aws ec2 create-security-group --group-name devenv-sg --description "security gro
 aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
 
 # Run one instance with Amazon Linux (HVM (SSD) EBS-Backed 64-bit) operating system, our security group attached, of smallest available type, authorize with devenv-key and return the instance id
-aws ec2 run-instances --image-id 'ami-0233214e13e500f77' --security-group-ids sg-0793dad6776c31f1e --count 1 --instance-type t2.nano --key-name devenv-key --query 'Instances[0].InstanceId'
+aws ec2 run-instances --image-id 'ami-0233214e13e500f77' --security-group-ids <sg-id> --count 1 --instance-type t2.nano --key-name devenv-key --query 'Instances[0].InstanceId'
 
 # Describe instance to get public DNS Name (instance id from previous step)
-aws ec2 describe-instances --instance-ids i-0215403ad6755ad0c --query 'Reservations[0].Instances[0].PublicDnsName'
+aws ec2 describe-instances --instance-ids <id> --query 'Reservations[0].Instances[0].PublicDnsName'
 
 # Connect via SSH (type 'yes' when asked if you want to trust the remote server)
 ssh -i <path to secret file created above> ec2-user@<Public DNS Name>
-# e.g. ssh -i devenv-key.pem ec2-user@ec2-3-120-128-218.eu-central-1.compute.amazonaws.com
 
 # Stop instances
-aws ec2 stop-instances --instance-ids i-0215403ad6755ad0c
+aws ec2 stop-instances --instance-ids <id>
 
 # Start instances
-aws ec2 stop-instances --instance-ids i-0215403ad6755ad0c
+aws ec2 stop-instances --instance-ids <id>
 
 # Install requirements
 yum update && yum install -y git gcc bc fio nano && git clone https://github.com/tommartensen/mocc-assignments

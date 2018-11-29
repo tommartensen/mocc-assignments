@@ -1,44 +1,19 @@
 # CPU benchmark
 
-    1. The benchmark sequentially does linear algebra calculations, LU decomposition (some complicated matrix splitting with pivoting) and linear equation solving, all with floating point numbers to measure processor performance. 
-    It is designed to run enough repetitions to take at least 10 seconds. 
-    The result is based on the speed of LU decomposition and linear equation solving.
+1. The benchmark sequentially performs linear algebra calculations using floating point numbers and is divided in two parts. The routine DGEFA runs a LU decomposition (a matrix form of Gaussian elimination) and the second routine DGEFA implements a linear equation solving. Together, they are used to measure the processor performance. The benchmark is designed to run enough repetitions that one complete iteration of all repetitions takes at least 10 seconds. The result is measured in FLOPS, the number of floating point operations executed per second based on the speed of the LU decomposition and the linear equation solving.
 
-    2. The measure should be an indicator of how good a processor can solve real-world tasks. These tasks are approximated as floating point operations. 
-    The result is measured in Floating Point Operations Per Seconds (FLOPS). 
-    As floating-point operations are unprivileged instructions, we do not expect paravirtualization to have a big effect, the results should be comparable with a CPU of similar clock speed.
-    To see decreased performance through paravirtualization, we would have to create a benchmark with more syscalls. 
-    
-    3. AWS average result: 2302105.442 KiloFLOPSGCE average result: 2498647.101 KiloFLOPS
-    We see that GCE (n1-standard-1) has a higher average performance (2.5 GigaFLOPS) than the AWS instance (t2.nano) with 2.3 GigaFLOPS.
-    Both smallest instances perform in the same order of magnitude, which is consistent with our expectations.
-    Since we know that n1 instances run on 2.6 GHz Intel Xeon E5 (Sandy Bridge), 2.5 GHz Intel Xeon E5 v2 (Ivy Bridge), 2.3 GHz Intel Xeon E5 v3 (Haswell), 2.2 GHz Intel Xeon E5 v4 (Broadwell) or 2,0 GHz Intel Skylake (Skylake) 
-    and we know from AWS that t2 instances have **up to** 3.3 GHz clock speed on the latest Intel Xeon processor
-    we can't really say if GCE or AWS is preferable for the smallest instance type in regards to CPU speed,
-    because there are too many unknown variables: 
-    We could have landed on a fast GCE processor with outperforms the t2.nano, while a slower GCE processor would have been slower than t2.nano 
+2. The benchmark is designed to be an indicator of the capabilities of a processor to solve real-world tasks. For linpack, these tasks are approximated as floating point operations, since solving dense matrixes is very common in many engineering applications. As floating point operations are unprivileged instructions, we do not expect paravirtualization to have a big effect. The results should be comparable with a CPU of similar clock speed. To observe decreased performance through paravirtualization, we would have to create a benchmark with more syscalls.
+
+3. The average result of a t2.nano instance on AWS is ~2302105 KFLOPS. The average result of a n1-standard-1 instance on GCE is ~2498647 KFLOPS. We notice that the instance on GCE has a higher average performance (2.5 GFLOPS) than the AWS instance with 2.3 GigaFLOPS. Both smallest instances perform in the same order of magnitude, which is consistent with our expectations. Since we know that n1 instances run on one of the following processors: 2.6 GHz Intel Xeon E5 (Sandy Bridge), 2.5 GHz Intel Xeon E5 v2 (Ivy Bridge), 2.3 GHz Intel Xeon E5 v3 (Haswell), 2.2 GHz Intel Xeon E5 v4 (Broadwell) or 2,0 GHz Intel Skylake (Skylake) and we know from AWS that t2 instances have “up to” 3.3 GHz clock speed on the latest Intel Xeon processor, we cannot really tell if GCE or AWS is preferable for the smallest instance type in regards to CPU speed, because there are too many unknown variables. We could have landed on a fast GCE processor, which outperforms the t2.nano, whereas a slower GCE processor could have been slower than the t2.nano instance.
 
 
 # Memory benchmark
 
-    1. The memsweep benchmark measures the time to read and write an array on the heap at several locations.
-    Virtualization could affect the results, because the VMM has to verify the write operations.
-    Paravirtualization could decrease the impact of virtualization, as its goal is modifying the source
-    code of the guest VM to reduce the VMM interventions.
-
-    2. The n1-standard-1 instance on GCE averages 6.85 seconds over all executions during the 48 hours with 
-    a standard deviation of 0.4. The t2.nano instance on AWS averages 4.97s over all executions with a
-    standard deviation of 0.13. Based on this numbers, the access speed on the AWS instance is ~30% percent higher
-    than on the GCE. The GCE instance provides 3.75 GB RAM, whereas the AWS instance only provides 0.5 GB. 
-    Unfortunately, the cloud providers only state the RAM sizes and not the RAM speeds, hence we had no
-    concrete expecations.
+1. The memsweep benchmark measures the time to read and write an array on the heap at several locations. Virtualization could affect the results, because the VMM has to verify the write operations. Paravirtualization could decrease the impact of virtualization, as its goal is modifying the source code of the guest VM to reduce the VMM interventions.
+2. The n1-standard-1 instance on GCE averages 6.85 seconds over all executions during the 48 hours with a standard deviation of 0.4. The t2.nano instance on AWS averages 4.97s over all executions with a standard deviation of 0.13. Based on this numbers, the access speed on the AWS instance is ~30% percent higher than on the GCE instance. The GCE instance provides 3.75 GB RAM, whereas the AWS instance only provides 0.5 GB RAM. Unfortunately, the cloud providers only state these RAM sizes and not the RAM speeds, hence we had no concrete expectations for this comparison.
 
 
 # Disk benchmark
 
-    1. We expect the random access to be slower than the sequential access, since we have to jump around in the data instead of reading sequentially from start to end.
-    Since GCE uses non-volatile disk space and we did not do any improvements there (regional storage or additional local SSD), 
-    we expect it to have lower performance than the EBS-backed SSD storage from AWS.
-
-    2. For the random access, the GCE instance is three times slower than AWS instance with 515 / 1600 operations. This backs our expectations.
- 
+1. As GCE uses non-volatile HDD disk space and we did not select any additional improvements  (regional storage, additional local SSD, etc…), we expected it to have lower performance than the EBS-backed SSD storage from AWS. The n1-standard-1 instance on GCE averages ~106542417 B/s for sequential reads and writes and the t2.nano instance on AWS averages ~325485689 B/s. For the random access, the GCE instance is also three times slower than the AWS instance with ~515 versus ~1600 input/output operations per second (IOPS).
+2. We expect the random access to be slower than the sequential access, since HDDs as well as SSDs read data in pages and for that reason they have to jump in the data instead of reading sequentially from start to end. Converting the random read and write operations into B/s using the formula IOPS * B per IO, we receive ~2109440 B/S for GCE and ~6574080 B/s for AWS. This backs our expectations that these speeds are a lot slower than the sequential reading speeds.
