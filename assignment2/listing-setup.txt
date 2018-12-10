@@ -21,7 +21,8 @@ $ qemu-img create -f qcow2 testing-image.img 10G
 # * path to insert into cdrom (to boot from cdrom)
 $ sudo qemu-system-x86_64 -m 4096 -boot d -enable-kvm -smp 4 -net nic -net user -hda testing-image.img -cdrom ubuntu-18.04.1-desktop-amd64.iso
 
-# Interactively install Ubuntu in GUI and shutdown.
+# Interactively install Ubuntu in GUI that opened, install required tools via Terminal and shutdown.
+($ sudo apt-get update && sudo apt-get install -y git gcc fio)
 
 # Backup fresh installation
 $ cp testing-image.img backup.img
