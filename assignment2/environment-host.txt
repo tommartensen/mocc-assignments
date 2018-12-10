@@ -1,0 +1,448 @@
+Get information on kernel, architecture, hardware platform and operating system
+Linux tom-UX310UAK 4.15.0-42-generic #45-Ubuntu SMP Thu Nov 15 19:32:57 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+Get hardware information with lshw
+tom-ux310uak
+    description: Notebook
+    product: UX310UAK
+    vendor: ASUSTeK COMPUTER INC.
+    version: 1.0
+    serial: H1N0CV00R966019
+    width: 64 bits
+    capabilities: smbios-3.0 dmi-3.0 smp vsyscall32
+    configuration: boot=normal chassis=notebook family=UX uuid=183821E4-5235-43A4-B6C4-90C4F53EE037
+  *-core
+       description: Motherboard
+       product: UX310UAK
+       vendor: ASUSTeK COMPUTER INC.
+       physical id: 0
+       version: 1.0
+       serial: N0CV1651MB0132726
+       slot: MIDDLE
+     *-firmware
+          description: BIOS
+          vendor: American Megatrends Inc.
+          physical id: 0
+          version: UX310UAK.300
+          date: 10/03/2016
+          size: 64KiB
+          capacity: 8128KiB
+          capabilities: pci upgrade shadowing cdboot bootselect socketedrom edd int13floppy1200 int13floppy720 int13floppy2880 int5printscreen int9keyboard int14serial int17printer acpi usb smartbattery biosbootspecification uefi
+     *-memory
+          description: System Memory
+          physical id: 8
+          slot: System board or motherboard
+          size: 16GiB
+        *-bank:0
+             description: SODIMM DDR4 Synchronous 2400 MHz (0,4 ns)
+             product: 8ATF1G64HZ-2G3B1
+             vendor: Micron
+             physical id: 0
+             serial: 00000000
+             slot: ChannelA-DIMM0
+             size: 8GiB
+             width: 64 bits
+             clock: 2400MHz (0.4ns)
+        *-bank:1
+             description: [empty]
+             physical id: 1
+             slot: ChannelA-DIMM1
+        *-bank:2
+             description: SODIMM DDR4 Synchronous 2133 MHz (0,5 ns)
+             product: M471A1K43BB0-CPB
+             vendor: Samsung
+             physical id: 2
+             serial: 33E76458
+             slot: ChannelB-DIMM0
+             size: 8GiB
+             width: 64 bits
+             clock: 2133MHz (0.5ns)
+        *-bank:3
+             description: [empty]
+             physical id: 3
+             slot: ChannelB-DIMM1
+     *-cache:0
+          description: L1 cache
+          physical id: e
+          slot: L1 Cache
+          size: 128KiB
+          capacity: 128KiB
+          capabilities: synchronous internal write-back unified
+          configuration: level=1
+     *-cache:1
+          description: L2 cache
+          physical id: f
+          slot: L2 Cache
+          size: 512KiB
+          capacity: 512KiB
+          capabilities: synchronous internal write-back unified
+          configuration: level=2
+     *-cache:2
+          description: L3 cache
+          physical id: 10
+          slot: L3 Cache
+          size: 4MiB
+          capacity: 4MiB
+          capabilities: synchronous internal write-back unified
+          configuration: level=3
+     *-cpu
+          description: CPU
+          product: Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz
+          vendor: Intel Corp.
+          physical id: 11
+          bus info: cpu@0
+          version: Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz
+          serial: To Be Filled By O.E.M.
+          slot: U3E1
+          size: 3317MHz
+          capacity: 4005MHz
+          width: 64 bits
+          clock: 100MHz
+          capabilities: x86-64 fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp flush_l1d cpufreq
+          configuration: cores=2 enabledcores=2 threads=4
+     *-pci
+          description: Host bridge
+          product: Intel Corporation
+          vendor: Intel Corporation
+          physical id: 100
+          bus info: pci@0000:00:00.0
+          version: 02
+          width: 32 bits
+          clock: 33MHz
+        *-display
+             description: VGA compatible controller
+             product: Intel Corporation
+             vendor: Intel Corporation
+             physical id: 2
+             bus info: pci@0000:00:02.0
+             version: 02
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pciexpress msi pm vga_controller bus_master cap_list rom
+             configuration: driver=i915 latency=0
+             resources: irq:126 memory:ee000000-eeffffff memory:d0000000-dfffffff ioport:f000(size=64) memory:c0000-dffff
+        *-generic:0
+             description: Signal processing controller
+             product: Skylake Processor Thermal Subsystem
+             vendor: Intel Corporation
+             physical id: 4
+             bus info: pci@0000:00:04.0
+             version: 02
+             width: 64 bits
+             clock: 33MHz
+             capabilities: msi pm cap_list
+             configuration: driver=proc_thermal latency=0
+             resources: irq:16 memory:ef120000-ef127fff
+        *-usb
+             description: USB controller
+             product: Sunrise Point-LP USB 3.0 xHCI Controller
+             vendor: Intel Corporation
+             physical id: 14
+             bus info: pci@0000:00:14.0
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pm msi xhci bus_master cap_list
+             configuration: driver=xhci_hcd latency=0
+             resources: irq:124 memory:ef110000-ef11ffff
+        *-generic:1
+             description: Signal processing controller
+             product: Sunrise Point-LP Thermal subsystem
+             vendor: Intel Corporation
+             physical id: 14.2
+             bus info: pci@0000:00:14.2
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pm msi cap_list
+             configuration: driver=intel_pch_thermal latency=0
+             resources: irq:18 memory:ef138000-ef138fff
+        *-generic:2
+             description: Signal processing controller
+             product: Sunrise Point-LP Serial IO I2C Controller #0
+             vendor: Intel Corporation
+             physical id: 15
+             bus info: pci@0000:00:15.0
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pm bus_master cap_list
+             configuration: driver=intel-lpss latency=0
+             resources: irq:16 memory:ef137000-ef137fff
+        *-generic:3
+             description: Signal processing controller
+             product: Sunrise Point-LP Serial IO I2C Controller #1
+             vendor: Intel Corporation
+             physical id: 15.1
+             bus info: pci@0000:00:15.1
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pm bus_master cap_list
+             configuration: driver=intel-lpss latency=0
+             resources: irq:17 memory:ef136000-ef136fff
+        *-communication
+             description: Communication controller
+             product: Sunrise Point-LP CSME HECI #1
+             vendor: Intel Corporation
+             physical id: 16
+             bus info: pci@0000:00:16.0
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pm msi bus_master cap_list
+             configuration: driver=mei_me latency=0
+             resources: irq:127 memory:ef135000-ef135fff
+        *-storage
+             description: SATA controller
+             product: Sunrise Point-LP SATA Controller [AHCI mode]
+             vendor: Intel Corporation
+             physical id: 17
+             bus info: pci@0000:00:17.0
+             version: 21
+             width: 32 bits
+             clock: 66MHz
+             capabilities: storage msi pm ahci_1.0 bus_master cap_list
+             configuration: driver=ahci latency=0
+             resources: irq:125 memory:ef130000-ef131fff memory:ef134000-ef1340ff ioport:f090(size=8) ioport:f080(size=4) ioport:f060(size=32) memory:ef133000-ef1337ff
+        *-pci:0
+             description: PCI bridge
+             product: Intel Corporation
+             vendor: Intel Corporation
+             physical id: 1c
+             bus info: pci@0000:00:1c.0
+             version: f1
+             width: 32 bits
+             clock: 33MHz
+             capabilities: pci pciexpress msi pm normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             resources: irq:122 ioport:2000(size=4096) memory:a0000000-a01fffff ioport:a0200000(size=2097152)
+        *-pci:1
+             description: PCI bridge
+             product: Sunrise Point-LP PCI Express Root Port #8
+             vendor: Intel Corporation
+             physical id: 1c.7
+             bus info: pci@0000:00:1c.7
+             version: f1
+             width: 32 bits
+             clock: 33MHz
+             capabilities: pci pciexpress msi pm normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             resources: irq:123 memory:ef000000-ef0fffff
+           *-network
+                description: Wireless interface
+                product: Wireless 8260
+                vendor: Intel Corporation
+                physical id: 0
+                bus info: pci@0000:02:00.0
+                logical name: wlp2s0
+                version: 3a
+                serial: 34:f3:9a:64:87:cd
+                width: 64 bits
+                clock: 33MHz
+                capabilities: pm msi pciexpress bus_master cap_list ethernet physical wireless
+                configuration: broadcast=yes driver=iwlwifi driverversion=4.15.0-42-generic firmware=34.0.1 ip=192.168.0.5 latency=0 link=yes multicast=yes wireless=IEEE 802.11
+                resources: irq:128 memory:ef000000-ef001fff
+        *-isa
+             description: ISA bridge
+             product: Intel Corporation
+             vendor: Intel Corporation
+             physical id: 1f
+             bus info: pci@0000:00:1f.0
+             version: 21
+             width: 32 bits
+             clock: 33MHz
+             capabilities: isa bus_master
+             configuration: latency=0
+        *-memory UNCLAIMED
+             description: Memory controller
+             product: Sunrise Point-LP PMC
+             vendor: Intel Corporation
+             physical id: 1f.2
+             bus info: pci@0000:00:1f.2
+             version: 21
+             width: 32 bits
+             clock: 33MHz (30.3ns)
+             configuration: latency=0
+             resources: memory:ef12c000-ef12ffff
+        *-multimedia
+             description: Audio device
+             product: Intel Corporation
+             vendor: Intel Corporation
+             physical id: 1f.3
+             bus info: pci@0000:00:1f.3
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             capabilities: pm msi bus_master cap_list
+             configuration: driver=snd_hda_intel latency=32
+             resources: irq:129 memory:ef128000-ef12bfff memory:ef100000-ef10ffff
+        *-serial
+             description: SMBus
+             product: Sunrise Point-LP SMBus
+             vendor: Intel Corporation
+             physical id: 1f.4
+             bus info: pci@0000:00:1f.4
+             version: 21
+             width: 64 bits
+             clock: 33MHz
+             configuration: driver=i801_smbus latency=0
+             resources: irq:16 memory:ef132000-ef1320ff ioport:f040(size=32)
+     *-scsi
+          physical id: 1
+          logical name: scsi2
+          capabilities: emulated
+        *-disk
+             description: ATA Disk
+             product: SanDisk SD8SN8U5
+             physical id: 0.0.0
+             bus info: scsi@2:0.0.0
+             logical name: /dev/sda
+             version: 1002
+             serial: 164574421291
+             size: 476GiB (512GB)
+             capabilities: gpt-1.00 partitioned partitioned:gpt
+             configuration: ansiversion=5 guid=e39c7e47-302f-4141-a90c-a1e5b36a36fc logicalsectorsize=512 sectorsize=512
+           *-volume:0 UNCLAIMED
+                description: Windows FAT volume
+                vendor: MSDOS5.0
+                physical id: 1
+                bus info: scsi@2:0.0.0,1
+                version: FAT32
+                serial: 522d-51ac
+                size: 255MiB
+                capacity: 259MiB
+                capabilities: boot fat initialized
+                configuration: FATs=2 filesystem=fat label=SYSTEM name=EFI system partition
+           *-volume:1
+                description: reserved partition
+                vendor: Windows
+                physical id: 2
+                bus info: scsi@2:0.0.0,2
+                logical name: /dev/sda2
+                serial: 627f9318-27ea-4822-b1ce-1e76abc862c6
+                capacity: 15MiB
+                capabilities: nofs
+                configuration: name=Microsoft reserved partition
+           *-volume:2
+                description: Windows NTFS volume
+                vendor: Windows
+                physical id: 3
+                bus info: scsi@2:0.0.0,3
+                logical name: /dev/sda3
+                version: 3.1
+                serial: 80d4079b-436e-3644-a299-7b0c3e5243b4
+                size: 399GiB
+                capacity: 400GiB
+                capabilities: ntfs initialized
+                configuration: clustersize=4096 created=2017-01-04 03:56:44 filesystem=ntfs label=OS name=Basic data partition state=clean
+           *-volume:3
+                description: Windows NTFS volume
+                vendor: Windows
+                physical id: 4
+                bus info: scsi@2:0.0.0,4
+                logical name: /dev/sda4
+                version: 3.1
+                serial: 583b-9cbc
+                size: 835MiB
+                capacity: 866MiB
+                capabilities: boot precious readonly hidden nomount ntfs initialized
+                configuration: clustersize=4096 created=2017-09-28 20:04:30 filesystem=ntfs modified_by_chkdsk=true mounted_on_nt4=true resize_log_file=true state=dirty upgrade_on_mount=true
+           *-volume:4
+                description: EXT4 volume
+                vendor: Linux
+                physical id: 5
+                bus info: scsi@2:0.0.0,5
+                logical name: /dev/sda5
+                logical name: /
+                version: 1.0
+                serial: e3187cf7-4d17-47c2-b26f-df3fe7b6c09e
+                size: 75GiB
+                capabilities: journaled extended_attributes large_files huge_files dir_nlink recover 64bit extents ext4 ext2 initialized
+                configuration: created=2018-10-17 21:10:04 filesystem=ext4 lastmountpoint=/ modified=2018-12-09 09:31:40 mount.fstype=ext4 mount.options=rw,relatime,errors=remount-ro,data=ordered mounted=2018-12-09 09:31:40 state=mounted
+  *-network:0
+       description: Ethernet interface
+       physical id: 1
+       logical name: virbr0
+       serial: 52:54:00:06:9b:fa
+       capabilities: ethernet physical
+       configuration: broadcast=yes driver=bridge driverversion=2.3 firmware=N/A ip=192.168.122.1 link=no multicast=yes
+  *-network:1
+       description: Ethernet interface
+       physical id: 2
+       logical name: docker0
+       serial: 02:42:20:f0:98:61
+       capabilities: ethernet physical
+       configuration: broadcast=yes driver=bridge driverversion=2.3 firmware=N/A ip=172.17.0.1 link=no multicast=yes
+  *-network:2 DISABLED
+       description: Ethernet interface
+       physical id: 3
+       logical name: virbr0-nic
+       serial: 52:54:00:06:9b:fa
+       size: 10Mbit/s
+       capabilities: ethernet physical
+       configuration: autonegotiation=off broadcast=yes driver=tun driverversion=1.6 duplex=full link=no multicast=yes port=twisted pair speed=10Mbit/s
+Get cpu information with lscpu
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              4
+On-line CPU(s) list: 0-3
+Thread(s) per core:  2
+Core(s) per socket:  2
+Socket(s):           1
+NUMA node(s):        1
+Vendor ID:           GenuineIntel
+CPU family:          6
+Model:               142
+Model name:          Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz
+Stepping:            9
+CPU MHz:             3317.943
+CPU max MHz:         3500,0000
+CPU min MHz:         400,0000
+BogoMIPS:            5808.00
+Virtualization:      VT-x
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            256K
+L3 cache:            4096K
+NUMA node0 CPU(s):   0-3
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp flush_l1d
+Get block device information with lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+loop0    7:0    0  88,2M  1 loop /snap/core/5897
+loop1    7:1    0  87,9M  1 loop /snap/core/5662
+loop2    7:2    0   2,3M  1 loop /snap/gnome-calculator/260
+loop3    7:3    0 570,9M  1 loop /snap/intellij-idea-ultimate/91
+loop4    7:4    0 130,6M  1 loop /snap/postman/80
+loop5    7:5    0   3,7M  1 loop /snap/gnome-system-monitor/51
+loop6    7:6    0   7,3M  1 loop /snap/helm/63
+loop7    7:7    0 338,8M  1 loop /snap/pycharm-professional/107
+loop8    7:8    0 140,9M  1 loop /snap/gnome-3-26-1604/70
+loop9    7:9    0  14,5M  1 loop /snap/gnome-logs/37
+loop10   7:10   0  87,9M  1 loop /snap/core/5742
+loop11   7:11   0 173,6M  1 loop /snap/spotify/28
+loop12   7:12   0 600,9M  1 loop /snap/intellij-idea-ultimate/97
+loop13   7:13   0    13M  1 loop /snap/gnome-characters/139
+loop14   7:14   0   2,3M  1 loop /snap/gnome-calculator/180
+loop15   7:15   0 601,7M  1 loop /snap/intellij-idea-ultimate/102
+loop16   7:16   0 173,3M  1 loop /snap/spotify/24
+loop17   7:17   0 173,3M  1 loop /snap/spotify/26
+loop18   7:18   0    13M  1 loop /snap/gnome-characters/103
+loop19   7:19   0   299M  1 loop /snap/pycharm-professional/99
+loop20   7:20   0    13M  1 loop /snap/gnome-characters/124
+loop21   7:21   0  34,6M  1 loop /snap/gtk-common-themes/818
+loop22   7:22   0 338,6M  1 loop /snap/pycharm-professional/103
+loop23   7:23   0 140,7M  1 loop /snap/gnome-3-26-1604/74
+loop24   7:24   0 129,7M  1 loop /snap/postman/73
+loop25   7:25   0   3,7M  1 loop /snap/gnome-system-monitor/57
+loop26   7:26   0  34,2M  1 loop /snap/gtk-common-themes/808
+loop27   7:27   0  42,1M  1 loop /snap/gtk-common-themes/701
+loop28   7:28   0   2,3M  1 loop /snap/gnome-calculator/238
+loop29   7:29   0  14,5M  1 loop /snap/gnome-logs/45
+loop30   7:30   0         0 loop 
+sda      8:0    0   477G  0 disk 
+├─sda1   8:1    0   260M  0 part /boot/efi
+├─sda2   8:2    0    16M  0 part 
+├─sda3   8:3    0   400G  0 part 
+├─sda4   8:4    0   867M  0 part 
+└─sda5   8:5    0  75,8G  0 part /

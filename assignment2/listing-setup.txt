@@ -1,0 +1,30 @@
+# Make space
+$ mkdir qemu
+$ cd ~/qemu/
+
+# Install requirements
+$ sudo apt-get install -y qemu qemu-kvm libvirt-daemon-system libv virt-clients bridge-utils virt-manager
+
+# Download Ubuntu Image (as it suffices the requirement for GNU/Linux)
+$ wget http://releases.ubuntu.com/18.04.1/ubuntu-18.04.1-desktop-amd64.iso
+
+# Create an image of size 10G for the QEMU VM.
+$ qemu-img create -f qcow2 testing-image.img 10G
+
+# Start VM with (arguments in this order): 
+# * 4G RAM
+# * Booting from (emulated) cdrom
+# * KVM enabled
+# * 4 cores
+# * Ethernet Internet connection available inside VM by default
+# * path to hard drive to use
+# * path to insert into cdrom (to boot from cdrom)
+$ sudo qemu-system-x86_64 -m 4096 -boot d -enable-kvm -smp 4 -net nic -net user -hda testing-image.img -cdrom ubuntu-18.04.1-desktop-amd64.iso
+
+# Interactively install Ubuntu in GUI and shutdown.
+
+# Backup fresh installation
+$ cp testing-image.img backup.img
+
+# Start emulated system. Use same parameters as before, but boot from hard drive (c) and do not insert the cdrom image again.
+$ sudo qemu-system-x86_64 -m 4096 -boot c -enable-kvm -smp 4 -net nic -net user -hda testing-image.img
