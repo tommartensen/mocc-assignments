@@ -1,0 +1,1 @@
+echo $(python3 nginxfile.py $1)
