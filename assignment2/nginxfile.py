@@ -3,20 +3,21 @@ import sys
 import time
 import concurrent.futures
 
-def load_url(url):
-	urllib.request.urlretrieve(url)
+def load_url(ip):
+        url = "http://" + ip + "/file"
+        urllib.request.urlretrieve(url)
 
 def main():
-	url = sys.argv[1]
-	start = time.time()
+        ip = sys.argv[1]
+        start = time.time()
 
-	with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-		for i in range(2):
-			executor.submit(load_url, url)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                for i in range(2):
+                        executor.submit(load_url, ip)
 
-	end = time.time()
+        end = time.time()
 
-	print(end-start)
+        print(end-start)
 
 if __name__ == '__main__':
-	main()
+        main()
