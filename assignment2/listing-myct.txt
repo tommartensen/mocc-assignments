@@ -1,0 +1,4 @@
+sudo apt-get install debootstrap
+mkdir /test123/Videos
+mount --bind /home/fabian/Videos/ /test123/Videos
+mount -o bind,remount,ro /test123/Videos/
