@@ -1,30 +1,6 @@
-FROM alpine
+FROM ubuntu
 
-# fio installation, based on https://hub.docker.com/r/dmonakhov/alpine-fio/~/dockerfile/
-# Purposely not extending his Dockerfile, since the last build was 2 years ago.
-RUN apk --no-cache add \
-	bc \
-	make \
-	alpine-sdk \
-	zlib-dev \
-	libaio-dev \
-	linux-headers \
-	coreutils \
-	libaio && \
-    git clone https://github.com/axboe/fio && \
-    cd fio && \
-    ./configure && \
-    make -j`nproc` && \
-    make install && \
-    cd .. && \
-    rm -rf fio && \
-    apk --no-cache del \
-	make \
-	alpine-sdk \
-	zlib-dev \
-	libaio-dev \
-	linux-headers \
-	coreutils
+RUN apt-get update && apt-get install -y fio bc
 
 COPY measure-disk-random.sh .
 

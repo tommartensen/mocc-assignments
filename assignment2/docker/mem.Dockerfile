@@ -1,6 +1,6 @@
-FROM alpine
+FROM ubuntu
 
-RUN apk add build-base bc
+RUN apt-get update && apt-get install -y gcc bc
 
 COPY memsweep.c .
 COPY measure-mem.sh .

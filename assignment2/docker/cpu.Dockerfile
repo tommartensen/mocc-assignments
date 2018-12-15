@@ -1,6 +1,6 @@
-FROM alpine
+FROM ubuntu
 
-RUN apk add build-base
+RUN apt-get update && apt-get install -y gcc bc
 
 COPY linpack.c .
 COPY measure-cpu.sh .

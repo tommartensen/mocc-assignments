@@ -31,23 +31,31 @@ def run_executable(container_path, namespaces, limits, executable, arguments):
         "user":"--user"
     }
 
+    procID = os.getpid()
     for key, value in namespaces.items():
         if not os.path.exists("/proc/" + value):
             raise SystemExit("PID does not exist.")
 
+        if key == "mount":
+            unshare_options = " --mount-proc=%sproc " % container_path
+        
         #unshare_options += lookup[key] + "=/proc/" + value + "/ns/" + key + " "
+        if key == "pid":
+            procID = value
+
         nsenter_options += lookup[key] + "=/proc/" + value + "/ns/" + key + " "
 
+    for key, value in limits.items():
+        category, setting = key.split(".")
+        os.system("mkdir -p /sys/fs/cgroup/%s/demo" % category)
+        os.system('echo "%s" > /sys/fs/cgroup/%s/demo/%s.%s' % (value, category, category, setting))
+        os.system("echo %s > /sys/fs/cgroup/%s/demo/tasks" % (procID, category))
+
     nsenter_command = "nsenter " + nsenter_options if nsenter_options else ""
-    unshare_command = " unshare " + unshare_options + " -f --mount-proc=%sproc " % container_path
-    print(nsenter_command)
-    #os.system(nsenter_command)
-    print(unshare_command)
+    unshare_command = " unshare " + unshare_options + " -f"
     os.system(nsenter_command + unshare_command + " chroot  %s %s %s" % (container_path, executable, " ".join(arguments)))
 
-    #os.system()
 def run_container(parameters):
-    print(parameters)
     container_path = parameters.pop(0)
     namespaces = {}
     limits = {}
