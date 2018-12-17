@@ -1,11 +1,12 @@
 import os
 import sys
 import re
+import subprocess
 
 def init_container(parameters):
     container_path = parameters[0]
     os.system("mkdir -p %s" % container_path)
-    os.system("debootstrap stable %s http://httpredir.debian.org/debian/" % container_path)
+    os.system(" debootstrap stable %s http://httpredir.debian.org/debian/" % container_path)
 
 def map_container(parameters):
     container_path = parameters[0]
@@ -31,7 +32,10 @@ def run_executable(container_path, namespaces, limits, executable, arguments):
         "user":"--user"
     }
 
-    procID = os.getpid()
+    procID = -1
+    aux_flag = False
+    proc = None
+
     for key, value in namespaces.items():
         if not os.path.exists("/proc/" + value):
             raise SystemExit("PID does not exist.")
@@ -44,16 +48,27 @@ def run_executable(container_path, namespaces, limits, executable, arguments):
             procID = value
 
         nsenter_options += lookup[key] + "=/proc/" + value + "/ns/" + key + " "
+    
+    if procID == -1:
+        proc = subprocess.Popen(["chroot", container_path, "bin/bash"])
+        print(proc)
+        procID = proc.pid
+        aux_flag = True
 
     for key, value in limits.items():
         category, setting = key.split(".")
         os.system("mkdir -p /sys/fs/cgroup/%s/demo" % category)
         os.system('echo "%s" > /sys/fs/cgroup/%s/demo/%s.%s' % (value, category, category, setting))
         os.system("echo %s > /sys/fs/cgroup/%s/demo/tasks" % (procID, category))
+        
+    print("Process was started under process ID:",  procID)
 
     nsenter_command = "nsenter " + nsenter_options if nsenter_options else ""
     unshare_command = " unshare " + unshare_options + " -f"
     os.system(nsenter_command + unshare_command + " chroot  %s %s %s" % (container_path, executable, " ".join(arguments)))
+
+    if aux_flag:
+        proc.kill()
 
 def run_container(parameters):
     container_path = parameters.pop(0)
