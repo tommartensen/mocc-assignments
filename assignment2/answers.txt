@@ -1,0 +1,35 @@
+### CPU / Linpack Benchmark
+We expected the native performance to be the highest, followed by Docker and KVM 
+(where we expected slightly lower).
+We expected QEMU without KVM to have by far the lowest results.
+Our expectations were met. Regarding the performance differences to native:
+* Docker is near-native, because the process only runs in a certain kernel namespace, adding some overhead only
+* KVM is slower than Docker, because the guest OS knows it runs on virtualized hardware and can cooperate with the hypervisor for CPU and memory access, but still has the difference between VM and host OS.
+* QEMU without KVM is much slower, because it does can't access the hosts CPU like KVM and emulates both CPU and hardware.
+
+### Memory / Memsweep Benchmark
+We expected to have native, docker and KVM roughly the same results, 
+since all of them can access the memory (nearly) arbitrarly.
+Docker has the slight overhead of additional cgroups, and KVM has to - as before - access the host OS as an additional step.
+We expect QEMU without KVM to be the slowest by far, 
+since it has to emulate all hardware and CPU and memory, 
+with the last two being used heavily during the benchmark.
+Our expectations were met.
+
+### Disk Random / Fio Benchmark
+  1. We expected native and docker to have roughly the same performance, 
+     since both can operate directly on the disk.
+     Docker might be slightly slower, because of additional checks.
+     We expect KVM and QEMU to be much slower, since both virtualize the 
+     disk and the access to it. QEMU was expected to be even slower than KVM, 
+     because it also has to emulate the memory and CPU operations required for writing a large file to disk.
+     Our expectations were met.
+
+  2. We could have switched the "preallocation" parameter when creating the image for the system. 
+     In our setting, we use the default "metadata" setting which doesn't allocate space for data 
+     and grows the image on the disk, when data is written, like during the benchmark.
+     Thus during the benchmark, the disk has to be resized for every block written, which is a heavy penalty.
+     We could have used a pre-allocated image with the parameters "falloc"/"full", which would have blocked the full image size on the host disk
+     and mark all blocks within the image as unallocated or zero. 
+     According to https://www.jamescoyle.net/how-to/1810-qcow2-disk-images-and-performance 
+     this would have had faster guest write performance.

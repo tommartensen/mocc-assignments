@@ -22,10 +22,16 @@ $ qemu-img create -f qcow2 testing-image.img 10G
 $ sudo qemu-system-x86_64 -m 4096 -boot d -enable-kvm -smp 4 -net nic -net user -hda testing-image.img -cdrom ubuntu-18.04.1-desktop-amd64.iso
 
 # Interactively install Ubuntu in GUI that opened, install required tools via Terminal and shutdown.
-($ sudo apt-get update && sudo apt-get install -y git gcc fio)
+($ su)
+($ apt-get update && apt-get install -y git gcc fio python3 bc)
 
 # Backup fresh installation
 $ cp testing-image.img backup.img
 
 # Start emulated system. Use same parameters as before, but boot from hard drive (c) and do not insert the cdrom image again.
 $ sudo qemu-system-x86_64 -m 4096 -boot c -enable-kvm -smp 4 -net nic -net user -hda testing-image.img
+
+# clone repository, install nginx with install-nginx.sh script and run benchmarks. 
+
+# Start emulated system without KVM. Use same parameters as before, but boot from hard drive (c) and do not insert the cdrom image again.
+$ sudo qemu-system-x86_64 -m 4096 -boot c -smp 4 -net nic -net user -hda testing-image.img
