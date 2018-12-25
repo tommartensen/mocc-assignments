@@ -6,7 +6,8 @@ import subprocess
 def init_container(parameters):
     container_path = parameters[0]
     os.system("mkdir -p %s" % container_path)
-    os.system(" debootstrap stable %s http://httpredir.debian.org/debian/" % container_path)
+    os.system("debootstrap stable %s http://httpredir.debian.org/debian/" % container_path)
+    os.system("mount --bind /proc %sproc && chroot %s apt -y --allow-unauthenticated install python" % (container_path, container_path))
 
 def map_container(parameters):
     container_path = parameters[0]
@@ -17,7 +18,7 @@ def map_container(parameters):
     os.system("mount -o bind,remount,ro %s%s" % (container_path, target_path))
 
 def run_executable(container_path, namespaces, limits, executable, arguments):
-    print(container_path, namespaces, limits, executable, arguments)
+    #print(container_path, namespaces, limits, executable, arguments)
 
     container_path_root = container_path.rstrip("/").split("/")[-1]
     unshare_options = set()
@@ -35,7 +36,8 @@ def run_executable(container_path, namespaces, limits, executable, arguments):
     if not namespaces:
         unshare_options.add("-f")
     else:
-        nsenter_options.add("--mount=/proc/" + namespaces["pid"] + "/ns/mnt")
+        nsenter_options.add("--mount=/proc/" + list(namespaces.items())[0][1] + "/ns/mnt")
+        #   os.system("mount --bind /proc %sproc" % container_path)
 
     for key, value in namespaces.items():
         if not os.path.exists("/proc/" + value):
@@ -56,18 +58,19 @@ def run_executable(container_path, namespaces, limits, executable, arguments):
         else:
             unshare_options.add(lookup[key])
 
-    limit_command_builder = set()
+    limit_command_builder = []
+    
     for key, value in limits.items():
         category, setting = key.split(".")
-        limit_command_builder.add('echo %s > /sys/fs/cgroup/%s/myct/%s.%s' % (value, category, category, setting))
-        limit_command_builder.add('echo $$ > /sys/fs/cgroup/%s/myct/tasks' % category)
-        limit_command_builder.add("mkdir -p /sys/fs/cgroup/%s/myct" % category)
-        
+        limit_command_builder.append("mkdir -p /sys/fs/cgroup/%s/myct" % category)
+        limit_command_builder.append('echo %s > /sys/fs/cgroup/%s/myct/%s.%s' % (value, category, category, setting))
+        limit_command_builder.append('echo $$ > /sys/fs/cgroup/%s/myct/tasks' % category)
+
     limit_command = (" && ".join(limit_command_builder) + " && ") if limit_command_builder else ""
     nsenter_command = ("nsenter " + " ".join(nsenter_options)) if nsenter_options else ""
     unshare_command = "unshare " + " ".join(unshare_options)
     chroot_command = "chroot %s %s %s" % (container_path, executable, " ".join(arguments))
-    print(limit_command + nsenter_command + " " + unshare_command + " " + chroot_command)
+    #print(limit_command + nsenter_command + " " + unshare_command + " " + chroot_command)
     os.system(limit_command + nsenter_command + " " + unshare_command + " " + chroot_command)
 
 def run_container(parameters):
