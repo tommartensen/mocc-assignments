@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: assignment-frontend
+spec:
+  replicas: 3
+  containers:
+  - name: frontend
+    image: tommartensen/mocc-assignment-frontend:latest
+    ports:
+      - name: http
+        ports: 80
+    livenessProbe:
+      httpGet:
+        path: /ready
+        port: 80
+        httpHeaders:
+        - name: CC-Ready
+          value: Frontend
+      initialDelaySeconds: 3
+      periodSeconds: 3
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 80
+        httpHeaders:
+        - name: CC-Ready
+          value: Frontend
+      initialDelaySeconds: 3
+      periodSeconds: 3

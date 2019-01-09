@@ -1,0 +1,10 @@
+# Login to dockerHub, we will re-use an existing account (tommartensen) to publish the images
+docker login
+
+# Build & Push Frontend Image
+docker build . -t tommartensen/mocc-assignment-frontend:latest -f frontend.Dockerfile
+docker push tommartensen/mocc-assignment-frontend:latest
+
+# Build & Push Frontend Image
+docker build . -t tommartensen/mocc-assignment-backend:latest -f backend.Dockerfile
+docker push tommartensen/mocc-assignment-backend:latest
