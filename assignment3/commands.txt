@@ -8,3 +8,14 @@ docker push tommartensen/mocc-assignment-frontend:latest
 # Build & Push Frontend Image
 docker build . -t tommartensen/mocc-assignment-backend:latest -f backend.Dockerfile
 docker push tommartensen/mocc-assignment-backend:latest
+
+kubectl create -f backend-deployment.yaml
+kubectl expose deployment backend
+
+kubectl create -f frontend-deployment.yaml
+kubectl expose deployment frontend --type=NodePort
+
+kubectl get all
+
+NODE_PORT=kubectl get svc --selector=app=frontend -o jsonpath='{.items[*].spec.ports[*].nodePort}'
+curl http://<EXTERNAL_IP>:NODE_PORT

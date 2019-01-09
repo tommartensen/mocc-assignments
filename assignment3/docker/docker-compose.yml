@@ -1,13 +1,11 @@
 version: '3'
 services:
-  frontend: 
+  frontend:
     image: tommartensen/mocc-assignment-frontend:latest
     ports:
     - 8080:80
-    depends_on: 
-    - cc-backend-service
+    depends_on:
+    - backend
 
-  cc-backend-service:
+  backend:
     image: tommartensen/mocc-assignment-backend:latest
-    
-
