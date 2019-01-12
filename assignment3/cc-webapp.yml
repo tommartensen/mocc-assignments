@@ -1,0 +1,145 @@
+---
+- hosts: kube-master[0]
+  tasks:
+  - name: Copy kubernetes config
+    shell: mkdir -p {{ ansible_env.HOME }}/.kube/ && sudo cp /etc/kubernetes/admin.conf {{ ansible_env.HOME }}/.kube/config && sudo chown $(id -u):$(id -g) {{ ansible_env.HOME }}/.kube/config
+  - name: Install openshift
+    pip:
+      name: openshift
+  - name: Create a k8s namespace
+    k8s:
+      name: mocc
+      api_version: v1
+      kind: Namespace
+      state: present
+  - name: Create a Deployment object for the backend
+    k8s:
+      state: present
+      definition:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: backend
+          namespace: mocc
+          labels:
+            app: backend
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: backend
+          template:
+            metadata:
+              labels:
+                app: backend
+            spec:
+              containers:
+              - name: backend
+                image: tommartensen/mocc-assignment-backend:latest
+                imagePullPolicy: Always
+                ports:
+                  - name: http
+                    containerPort: 80
+                livenessProbe:
+                  httpGet:
+                    path: /ready
+                    port: 80
+                    httpHeaders:
+                    - name: CC-Ready
+                      value: Backend
+                  initialDelaySeconds: 3
+                  periodSeconds: 3
+                readinessProbe:
+                  httpGet:
+                    path: /ready
+                    port: 80
+                    httpHeaders:
+                    - name: CC-Ready
+                      value: Backend
+                  initialDelaySeconds: 3
+                  periodSeconds: 3
+  - name: Create a Service object from an inline definition
+    k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: backend
+          namespace: mocc
+          labels:
+            app: backend
+        spec:
+          selector:
+            app: backend
+          ports:
+          - protocol: TCP
+            targetPort: 80
+            name: port-80-tcp
+            port: 80
+  - name: Create a Deployment object for the frontend
+    k8s:
+      state: present
+      definition:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: frontend
+          namespace: mocc
+          labels:
+            app: frontend
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: frontend
+          template:
+            metadata:
+              labels:
+                app: frontend
+            spec:
+              containers:
+              - name: frontend
+                image: tommartensen/mocc-assignment-frontend:latest
+                imagePullPolicy: Always
+                ports:
+                  - name: http
+                    port: 80
+                    containerPort: 80
+                livenessProbe:
+                  httpGet:
+                    path: /ready
+                    port: 80
+                    httpHeaders:
+                    - name: CC-Ready
+                      value: Frontend
+                  initialDelaySeconds: 3
+                  periodSeconds: 3
+                readinessProbe:
+                  httpGet:
+                    path: /ready
+                    port: 80
+                    httpHeaders:
+                    - name: CC-Ready
+                      value: Frontend
+                  initialDelaySeconds: 3
+                  periodSeconds: 3
+  - name: Create a Service object from an inline definition
+    k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: frontend
+          namespace: mocc
+          labels:
+            app: frontend
+        spec:
+          selector:
+            app: frontend
+          type: NodePort
+          ports:
+            - nodePort: 30080
+              port: 80
+              targetPort: 80

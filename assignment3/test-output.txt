@@ -1,0 +1,45 @@
+Sending 100 requests to 10.142.0.13:30080...
+Sending 100 requests to 10.142.0.12:30080...
+Sending 100 requests to 10.142.0.11:30080...
+
+Encountered 4 frontends:
+frontend-785ffcb75-9rmfb
+frontend-785ffcb75-qfcbt
+frontend-785ffcb75-mhkq5
+frontend-785ffcb75-pthtb
+
+Encountered 6 backends:
+backend-d68db6bf5-j25gj
+backend-d68db6bf5-v5bqq
+backend-d68db6bf5-trwkn
+backend-d68db6bf5-bkzdn
+backend-d68db6bf5-q8gg7
+backend-d68db6bf5-d284x
+
+Encountered 24 reply texts:
+Hello! You are 10.233.102.133 and requested /etc/nginx/html/ from 10.233.71.3 (backend-d68db6bf5-j25gj)
+Hello! You are 10.233.102.135 and requested /etc/nginx/html/ from 10.233.71.3 (backend-d68db6bf5-j25gj)
+Hello! You are 10.233.102.135 and requested /etc/nginx/html/ from 10.233.75.5 (backend-d68db6bf5-q8gg7)
+Hello! You are 10.233.102.133 and requested /etc/nginx/html/ from 10.233.75.5 (backend-d68db6bf5-q8gg7)
+Hello! You are 10.233.102.133 and requested /etc/nginx/html/ from 10.233.75.7 (backend-d68db6bf5-v5bqq)
+Hello! You are 10.233.75.6 and requested /etc/nginx/html/ from 10.233.75.7 (backend-d68db6bf5-v5bqq)
+Hello! You are 10.233.75.6 and requested /etc/nginx/html/ from 10.233.102.134 (backend-d68db6bf5-trwkn)
+Hello! You are 10.233.71.6 and requested /etc/nginx/html/ from 10.233.71.7 (backend-d68db6bf5-d284x)
+Hello! You are 10.233.71.6 and requested /etc/nginx/html/ from 10.233.102.134 (backend-d68db6bf5-trwkn)
+Hello! You are 10.233.71.6 and requested /etc/nginx/html/ from 10.233.71.3 (backend-d68db6bf5-j25gj)
+Hello! You are 10.233.102.133 and requested /etc/nginx/html/ from 10.233.71.7 (backend-d68db6bf5-d284x)
+Hello! You are 10.233.102.135 and requested /etc/nginx/html/ from 10.233.102.134 (backend-d68db6bf5-trwkn)
+Hello! You are 10.233.102.133 and requested /etc/nginx/html/ from 10.233.102.136 (backend-d68db6bf5-bkzdn)
+Hello! You are 10.233.71.6 and requested /etc/nginx/html/ from 10.233.75.7 (backend-d68db6bf5-v5bqq)
+Hello! You are 10.233.102.135 and requested /etc/nginx/html/ from 10.233.75.7 (backend-d68db6bf5-v5bqq)
+Hello! You are 10.233.102.133 and requested /etc/nginx/html/ from 10.233.102.134 (backend-d68db6bf5-trwkn)
+Hello! You are 10.233.75.6 and requested /etc/nginx/html/ from 10.233.71.3 (backend-d68db6bf5-j25gj)
+Hello! You are 10.233.75.6 and requested /etc/nginx/html/ from 10.233.75.5 (backend-d68db6bf5-q8gg7)
+Hello! You are 10.233.71.6 and requested /etc/nginx/html/ from 10.233.102.136 (backend-d68db6bf5-bkzdn)
+Hello! You are 10.233.71.6 and requested /etc/nginx/html/ from 10.233.75.5 (backend-d68db6bf5-q8gg7)
+Hello! You are 10.233.102.135 and requested /etc/nginx/html/ from 10.233.71.7 (backend-d68db6bf5-d284x)
+Hello! You are 10.233.75.6 and requested /etc/nginx/html/ from 10.233.102.136 (backend-d68db6bf5-bkzdn)
+Hello! You are 10.233.75.6 and requested /etc/nginx/html/ from 10.233.71.7 (backend-d68db6bf5-d284x)
+Hello! You are 10.233.102.135 and requested /etc/nginx/html/ from 10.233.102.136 (backend-d68db6bf5-bkzdn)
+
+All tests passed.
