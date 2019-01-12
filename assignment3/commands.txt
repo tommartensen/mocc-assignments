@@ -1,37 +1,84 @@
-# Login to dockerHub, we will re-use an existing account (tommartensen) to publish the images
-docker login
+# Prepare VMs (task 0)
+## Login to GCloud
+$ gcloud auth login
 
-# Build & Push Frontend Image
-docker build . -t tommartensen/mocc-assignment-frontend:latest -f frontend.Dockerfile
-docker push tommartensen/mocc-assignment-frontend:latest
+## Create 3 instances on GCloud
 
-# Build & Push Frontend Image
-docker build . -t tommartensen/mocc-assignment-backend:latest -f backend.Dockerfile
-docker push tommartensen/mocc-assignment-backend:latest
+$ gcloud compute instances create vm1 --image-family ubuntu-1804-lts --image-project ubuntu-os-cloud --zone europe-west1-b
+$ gcloud compute instances create vm2 --image-family ubuntu-1804-lts --image-project ubuntu-os-cloud --zone europe-west1-b
+$ gcloud compute instances create vm3 --image-family ubuntu-1804-lts --image-project ubuntu-os-cloud --zone europe-west1-b
 
-kubectl create -f backend-deployment.yaml
-kubectl expose deployment backend
+## Fetch VMs' external and GCloud internal IPs
+$ gcloud compute instances list
 
-kubectl create -f frontend-deployment.yaml
-kubectl expose deployment frontend --type=NodePort
+## Change Firewall Settings
+Go to GCloud Console and create a firewall rule allowing all traffic into the project from anywhere.
 
-kubectl get all
+# Create Cluster (task 1)
+## Clone repo
+$ git clone https://github.com/kubernetes-sigs/kubespray \
+  && cd kubespray \
+  && git checkout v2.8.1
 
-NODE_PORT=kubectl get svc --selector=app=frontend -o jsonpath='{.items[*].spec.ports[*].nodePort}'
-curl http://<EXTERNAL_IP>:NODE_PORT
+## Install requirements
+$ pip install -r requirements.txt
 
-# For all 3 VMs
-sudo cp /etc/kubernetes/admin.conf $HOME/
-sudo chown $(id -u):$(id -g) $HOME/admin.conf
-export KUBECONFIG=$HOME/admin.conf
+## Copy sample inventory
+$ cp -rfp inventory/sample inventory/mycluster
 
-# Execute in /usr/local/bin
-curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/v3.4.0/calicoctl
-chmod +x calicoctl
+## Adapt inventory/mycluster/hosts.ini to submitted file 
+(and change external and internal IPs).
 
-pip install -r requirements.txt
+## Run playbook to create cluster
+$ ansible-playbook -i inventory/mycluster/hosts.ini cluster.yml -b -v --private-key=~/.ssh/google_compute_engine --become-user=root
 
- cp -rfp inventory/sample inventory/mycluster
- ansible-playbook -i inventory/mycluster/hosts.ini cluster.yml -b -v --private-key=~/.ssh/google_compute_engine --become-user=root
+# Prepare application containers (task 2)
+## We have change the nginx config files, see attached files.
+## Login to dockerHub, we will re-use an existing account (tommartensen) to publish the images
+$ docker login
 
- pip install openshift --user
+## Build & Push Frontend Image
+$ docker build . -t tommartensen/mocc-assignment-frontend:latest -f frontend.Dockerfile
+$ docker push tommartensen/mocc-assignment-frontend:latest
+
+## Build & Push Frontend Image
+$ docker build . -t tommartensen/mocc-assignment-backend:latest -f backend.Dockerfile
+$ docker push tommartensen/mocc-assignment-backend:latest
+
+# Deploy the application (task 3)
+## Upgrade pip
+$ pip install --upgrade ansible
+
+## Run playbook to setup kubectl and deploy application 
+$ ansible-playbook -i kubespray/inventory/mycluster/hosts.ini cc-webapp.yml -v --private-key=~/.ssh/google_compute_engine
+
+# Scale up and Test the Deployment (task 4)
+## Verify successful application
+This command is run on vm1 (or any other cluster node), to connect:
+$ gcloud compute ssh vm1
+Then: 
+$ kubectl get all -n mocc
+$ export NODE_PORT=$(kubectl get svc --selector=app=frontend -n mocc -o jsonpath='{.items[*].spec.ports[*].nodePort}')
+$ curl -v http://<GCLOUD_INTERNAL_IP>:$NODE_PORT
+this would translate to:
+$ curl -v http://10.132.0.3:30080
+
+## Scale frontend to 4 pods and backend to 6.
+These commands will also be executed on vm1  (or any other cluster node)
+$ kubectl scale --replicas 4 deploy/frontend -n mocc
+$ kubectl scale --replicas 6 deploy/backend -n mocc
+
+## Verify scaling
+$ kubectl get deploy -n mocc
+
+## Execute Python Test Script
+This can be downloaded and unzipped from lecture website.
+$  curl -u <user>:<pw> https://www.dcl.hpi.uni-potsdam.de/teaching/mocc/assignments/assignment3-resources.zip -o temp.zip \
+  && unzip temp.zip \
+  && cd assignment3-resources/
+  && python test-deployment.py <GCLOUD_INTERNAL_IP_VM1>:$NODE_PORT <GCLOUD_INTERNAL_IP_VM1>:$NODE_PORT <GCLOUD_INTERNAL_IP_VM1>:$NODE_PORT > test-output.txt
+
+Example test script call:
+$ python test-deployment.py 10.132.0.3:$NODE_PORT 10.132.0.4:$NODE_PORT 10.132.0.5:$NODE_PORT > test-output.txt
+
+## Now retrieve the test-output.txt from the vm with scp.

@@ -47,8 +47,8 @@
                     httpHeaders:
                     - name: CC-Ready
                       value: Backend
-                  initialDelaySeconds: 3
-                  periodSeconds: 3
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
                 readinessProbe:
                   httpGet:
                     path: /ready
@@ -56,9 +56,9 @@
                     httpHeaders:
                     - name: CC-Ready
                       value: Backend
-                  initialDelaySeconds: 3
-                  periodSeconds: 3
-  - name: Create a Service object from an inline definition
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
+  - name: Create a Service object for the backend with default ClusterIP
     k8s:
       state: present
       definition:
@@ -75,7 +75,6 @@
           ports:
           - protocol: TCP
             targetPort: 80
-            name: port-80-tcp
             port: 80
   - name: Create a Deployment object for the frontend
     k8s:
@@ -113,8 +112,8 @@
                     httpHeaders:
                     - name: CC-Ready
                       value: Frontend
-                  initialDelaySeconds: 3
-                  periodSeconds: 3
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
                 readinessProbe:
                   httpGet:
                     path: /ready
@@ -122,9 +121,9 @@
                     httpHeaders:
                     - name: CC-Ready
                       value: Frontend
-                  initialDelaySeconds: 3
-                  periodSeconds: 3
-  - name: Create a Service object from an inline definition
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
+  - name: Create a Service object for the frontend with a NodePort
     k8s:
       state: present
       definition:
@@ -142,4 +141,3 @@
           ports:
             - nodePort: 30080
               port: 80
-              targetPort: 80
