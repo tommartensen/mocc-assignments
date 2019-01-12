@@ -19,3 +19,14 @@ kubectl get all
 
 NODE_PORT=kubectl get svc --selector=app=frontend -o jsonpath='{.items[*].spec.ports[*].nodePort}'
 curl http://<EXTERNAL_IP>:NODE_PORT
+
+sudo cp /etc/kubernetes/admin.conf $HOME/
+sudo chown $(id -u):$(id -g) $HOME/admin.conf
+export KUBECONFIG=$HOME/admin.conf
+
+# Execute in /usr/local/bin
+curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/v3.4.0/calicoctl
+chmod +x calicoctl
+
+ cp -rfp inventory/sample inventory/mycluster
+ ansible-playbook -i inventory/mycluster/hosts.ini cluster.yml -b -v --private-key=~/.ssh/google_compute_engine --become-user=root
