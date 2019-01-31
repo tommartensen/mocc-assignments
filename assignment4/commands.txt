@@ -1,3 +1,4 @@
+# Exercise 1
 $ wget https://www.apache.org/dyn/closer.lua/flink/flink-1.7.1/flink-1.7.1-bin-scala_2.11.tgz
 $ tar xzf flink-1.7.1-bin-scala_2.11.tgz
 $ cd flink-1.7.1
@@ -6,3 +7,50 @@ $ ./bin/start-cluster.sh
 $ cd wordcount 
 $ mvn clean package
 $ ../flink-1.7.1/bin/flink run target/wordcount-0.0.1.jar --input ../data/tolstoy-war-and-peace.txt --output wordcounts.csv
+
+# Exercise 3
+# create an s3 bucket to contain the input, output files.
+$ aws s3api create-bucket --bucket mocc-bucket --region us-east-1
+
+# Use the AWS CLI to create new default roles. After making these changes, you should be able to successfully provision a new cluster.
+$ aws emr create-default-roles
+
+# Create the cluster with the following command:
+--name : Name for cluster
+--release-label : which emr version and therefore which Flink, Hadoop, ... version to install
+--applications : 
+--ec2-attributes : comma-separated key-value list of options for the ec2 instances, here which key to allow access (aws ec2 describe-key-pairs)
+--instance-type : which instance type to use for nodes, m4.large is the smallest/default option
+--instance-count: how many instances (master + cores)
+--use-default-roles : use roles created in previous step
+--configurations : add file path of configurations file, where we can also specify the flink config. 
+                    Our configuration only contains how many task slots should be available, which is equal to the number of core machines * how many cpus they each have (2*1)
+
+$ aws emr create-cluster --name "Cluster with Flink" --release-label emr-5.20.0 --applications Name=Flink \
+--ec2-attributes KeyName=devenv-key --instance-type m4.large --instance-count 3 --use-default-roles \
+--configurations file://./configurations.json
+
+
+# get master hostname to connect via SSH
+$ aws emr describe-cluster --cluster-id j-3BUE19IY12YFS --query 'Cluster.MasterPublicDnsName'
+
+# upload the jar to the cluster (you may have to adapt the inbound firewall rules of the master)
+$ scp -i my-key.pem wordcount-0.0.1.jar hadoop@ec2-3-120-205-26.eu-central-1.compute.amazonaws.com:/home/hadoop/wordcount-0.0.1.jar
+
+# Send job to Cluster
+# specify the cluster id, say that you want to run a custom jar, give it a name and say that you want to execute it with the command-runner.jar
+# which is already on the AMI. 
+# in the args, you have to specify the command that should be executed during the step on the master.
+# in this case, we want to run a short-lived flink job on the "yarn-cluster" with parallelism of 2 (yn), 
+# we specify the jar that we created from the source code and uploaded to the server and pass the arguments for input and output files.
+# since flink can connect to files on s3 buckets, we can specify the path directly. 
+
+$ aws emr add-steps --cluster-id j-3BUE19IY12YFS \
+--steps Type=CUSTOM_JAR,Name=Flink-WordCount,Jar=command-runner.jar,\
+Args="flink","run","-m","yarn-cluster","-yn","2","/home/hadoop/wordcount-0.0.1.jar",\
+"--input","s3://mocc-bucket/tolstoy-war-and-peace.txt","--output","s3://mocc-bucket/wordcount.csv" 
+
+$ aws emr add-steps --cluster-id j-3BUE19IY12YFS \
+--steps Type=CUSTOM_JAR,Name=Flink-CellCluster,Jar=command-runner.jar,\
+Args="flink","run","-m","yarn-cluster","-yn","2","/home/hadoop/cellcluster-0.0.1.jar",\
+"--input","s3://mocc-bucket/berlin.csv","--output","s3://mocc-bucket/clusters.csv","--k","500","--iterations","10","--mnc","1,6,78" 
