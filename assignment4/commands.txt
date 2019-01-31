@@ -1,0 +1,8 @@
+$ wget https://www.apache.org/dyn/closer.lua/flink/flink-1.7.1/flink-1.7.1-bin-scala_2.11.tgz
+$ tar xzf flink-1.7.1-bin-scala_2.11.tgz
+$ cd flink-1.7.1
+$ ./bin/start-cluster.sh
+
+$ cd wordcount 
+$ mvn clean package
+$ ../flink-1.7.1/bin/flink run target/wordcount-0.0.1.jar --input ../data/tolstoy-war-and-peace.txt --output wordcounts.csv
