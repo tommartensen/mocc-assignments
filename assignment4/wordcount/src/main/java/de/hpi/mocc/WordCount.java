@@ -25,6 +25,7 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.util.Collector;
 
 
@@ -57,15 +58,15 @@ public class WordCount {
 		}
 
 		DataSet<Tuple2<String, Integer>> counts =
-				// split up the lines in pairs (2-tuples) containing: (word,1)
-				text.flatMap(new Tokenizer())
-						// group by the tuple field "0" and sum up tuple field "1"
-						.groupBy(0)
-						.sum(1);
+				text
+					.flatMap(new Tokenizer())
+					.filter(tuple -> tuple.f0.matches("[A-Za-z]+"))
+					.groupBy(0)
+					.sum(1);
 
 		// emit result
 		if (params.has("output")) {
-			counts.writeAsCsv(outputFile, "\n", ",").setParallelism(1);
+			counts.writeAsCsv(outputFile, "\n", ",", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
 			// execute program
 			env.execute("WordCount Example");
 		}
