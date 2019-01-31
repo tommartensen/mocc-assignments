@@ -70,7 +70,7 @@ import scala.collection.JavaConverters._
   * - Broadcast variables in bulk iterations
   * - Scala case classes
   */
-object KMeans {
+object CellClusters {
 
   def main(args: Array[String]) {
 

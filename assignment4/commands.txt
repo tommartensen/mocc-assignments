@@ -53,4 +53,4 @@ Args="flink","run","-m","yarn-cluster","-yn","2","/home/hadoop/wordcount-0.0.1.j
 $ aws emr add-steps --cluster-id j-3BUE19IY12YFS \
 --steps Type=CUSTOM_JAR,Name=Flink-CellCluster,Jar=command-runner.jar,\
 Args="flink","run","-m","yarn-cluster","-yn","2","/home/hadoop/cellcluster-0.0.1.jar",\
-"--input","s3://mocc-bucket/berlin.csv","--output","s3://mocc-bucket/clusters.csv","--k","500","--iterations","10","--mnc","1,6,78" 
+"--input","s3://mocc-bucket/berlin.csv","--output","s3://mocc-bucket/berlin-cluster-5.csv","--mnc","20\,78\,1","--iterations","100"

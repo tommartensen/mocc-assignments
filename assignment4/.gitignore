@@ -2,3 +2,4 @@ flink-1.7.1/
 **/target/
 **/.idea/
 **/*.iml
+dependency-reduced-pom.xml
