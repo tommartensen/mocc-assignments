@@ -47,10 +47,10 @@ $ scp -i my-key.pem wordcount-0.0.1.jar hadoop@ec2-3-120-205-26.eu-central-1.com
 
 $ aws emr add-steps --cluster-id j-TR90EWT9EGXU \
 --steps Type=CUSTOM_JAR,Name=Flink-WordCount,Jar=command-runner.jar,\
-Args="flink","run","-m","yarn-cluster","-yn","3","/home/hadoop/wordcount-0.0.1.jar",\
+Args="flink","run","-m","yarn-cluster","-yn","3","-c","de.hpi.mocc.WordCount","/home/hadoop/wordcount-0.0.1.jar",\
 "--input","s3://mocc-bucket/tolstoy-war-and-peace.txt","--output","s3://mocc-bucket/wordcount.csv" 
 
 $ aws emr add-steps --cluster-id j-TR90EWT9EGXU \
 --steps Type=CUSTOM_JAR,Name=Flink-CellCluster,Jar=command-runner.jar,\
-Args="flink","run","-m","yarn-cluster","-yn","3","/home/hadoop/cellclusters-0.0.1.jar",\
+Args="flink","run","-m","yarn-cluster","-yn","3","-c","de.hpi.mocc.CellCluster","/home/hadoop/cellclusters-0.0.1.jar",\
 "--input","s3://mocc-bucket/berlin.csv","--output","s3://mocc-bucket/berlin-cluster-5.csv","--mnc","20\,78\,1","--iterations","10","--k","500"

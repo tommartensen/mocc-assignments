@@ -2,7 +2,7 @@
     {
       "Classification": "flink-conf",
       "Properties": {
-        "taskmanager.numberOfTaskSlots":"3"
+        "taskmanager.numberOfTaskSlots":"4"
       }
     }
 ]
