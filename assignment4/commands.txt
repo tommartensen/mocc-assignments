@@ -31,10 +31,10 @@ $ aws emr create-cluster --name "Cluster with Flink" --release-label emr-5.20.0 
 --configurations file://./configurations.json
 
 
-# get master hostname to connect via SSH
-$ aws emr describe-cluster --cluster-id j-3BUE19IY12YFS --query 'Cluster.MasterPublicDnsName'
+# get master hostname to connect via SSH (with the returned cluster id from previous step)
+$ aws emr describe-cluster --cluster-id j-TR90EWT9EGXU --query 'Cluster.MasterPublicDnsName'
 
-# upload the jar to the cluster (you may have to adapt the inbound firewall rules of the master)
+# upload the jar to the cluster (you may have to adapt the inbound firewall rules of the master security group) with the master dns name retrieved from previous step
 $ scp -i my-key.pem wordcount-0.0.1.jar hadoop@ec2-3-120-205-26.eu-central-1.compute.amazonaws.com:/home/hadoop/wordcount-0.0.1.jar
 
 # Send job to Cluster
@@ -45,12 +45,12 @@ $ scp -i my-key.pem wordcount-0.0.1.jar hadoop@ec2-3-120-205-26.eu-central-1.com
 # we specify the jar that we created from the source code and uploaded to the server and pass the arguments for input and output files.
 # since flink can connect to files on s3 buckets, we can specify the path directly. 
 
-$ aws emr add-steps --cluster-id j-3BUE19IY12YFS \
+$ aws emr add-steps --cluster-id j-TR90EWT9EGXU \
 --steps Type=CUSTOM_JAR,Name=Flink-WordCount,Jar=command-runner.jar,\
 Args="flink","run","-m","yarn-cluster","-yn","3","/home/hadoop/wordcount-0.0.1.jar",\
 "--input","s3://mocc-bucket/tolstoy-war-and-peace.txt","--output","s3://mocc-bucket/wordcount.csv" 
 
-$ aws emr add-steps --cluster-id j-3BUE19IY12YFS \
+$ aws emr add-steps --cluster-id j-TR90EWT9EGXU \
 --steps Type=CUSTOM_JAR,Name=Flink-CellCluster,Jar=command-runner.jar,\
-Args="flink","run","-m","yarn-cluster","-yn","3","/home/hadoop/cellcluster-0.0.1.jar",\
-"--input","s3://mocc-bucket/berlin.csv","--output","s3://mocc-bucket/berlin-cluster-5.csv","--mnc","20\,78\,1","--iterations","100"
+Args="flink","run","-m","yarn-cluster","-yn","3","/home/hadoop/cellclusters-0.0.1.jar",\
+"--input","s3://mocc-bucket/berlin.csv","--output","s3://mocc-bucket/berlin-cluster-5.csv","--mnc","20\,78\,1","--iterations","10","--k","500"
