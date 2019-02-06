@@ -1,0 +1,42 @@
+runtime:
+
+| i/k  | 1   | 10  | 100 | 1000 |
+|------|-----|-----|-----|------|
+| 1    | 48s | 48s | 56s | 1m   |
+| 10   | 54s | 50s | 56s | 1m   |
+| 100  | 1m  | 1m  | 1m  | 3m   |
+| 1000 | 2m  | 3m  | 5m  | 38m  |
+
+For testing purposes we only considered the LTE towers of Telekom, so that the runtimes are not too long and we can finish them inside the assignment timeline. 
+Since our cluster setup reads/writes from S3, we created some copies of the input file with different orderings which simulates different initial placements.
+We could not find significant differences in runtime.
+
+Further, we tested different numbers of iterations and clusters, each with the values 1, 10, 100, 1000 -- this 16 measurements.
+We observe an increase in runtime along both axes, f.e. with 1 iteration, we see increasing runtime with increasing  number of clusters.
+The most striking outlier is probably for k=1000 and i=1000 a runtime of 38 minutes. This trend can also be observed in a smaller scale with i=100 and k=1000.
+This leads us to the conclusion that, while iterations trivially are just the execution of the same algorithm more often, an increase of k increases the runtime significantly.
+This could be because more data has to be transferred between the nodes, because more subgroups of the data are investigated.
+Regarding the result, we used the provided Python script for visualization.
+The differences in the k manifested in the number of clusters, and because each has a different color, 
+also that there are more "patches" visible. With more iterations, the clusters were more coherent and more clearly visible.
+
+• Which steps in your program require communication and synchronization
+between your workers?
+
+CellCluster:
+	- reading the csv file is done by the ExecutionEnvironment which is executed on the master of the cluster
+	- afterwards the master communicates with the workers to distribute the data
+	- .groupBy also needs additional communication because the data is distributed by key on the workers
+	- in the end, to write to csv, the parallelism is set to 1 to generate only one output file
+		-> therefore, they workers have to be synchronized
+
+• What resources are your programs bound by? Memory? CPU? Network? Disk?
+	
+	- loading and storing the data is bound by the disk speed of the S3 storage
+	- executing the pipeline is bound by the CPU on each worker
+	- merging the results to combine them to one results for storing it is bound by the network speed
+	- the memory could be bound by larger amounts of data than the csv files we used so far
+
+• Could you improve the partitioning of your data to yield better run-time?
+
+	- by storing the csv file on a HDFS file system, reading the file could be performed distributed already for both programs and therefore accelerated 
